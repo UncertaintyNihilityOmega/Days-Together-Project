@@ -1,0 +1,620 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Homemade+Apple&family=Karla:wght@400;600&family=Parisienne&family=Cinzel:wght@600;700&family=UnifrakturCook:wght@700&family=Baloo+2:wght@600;700&display=swap');
+
+:root{
+  --wine:#6E1E2E;
+  --rose:#C2626F;
+  --blush:#F3DCD9;
+  --paper:#FDF6F0;
+  --gold:#BD9257;
+  --ink:#3B1A22;
+  --crater:#9C6B3E;
+  --heading-color:var(--wine);
+  --card-bg:rgba(253,246,240,0.92);
+  --card-border:rgba(189,146,87,.4);
+  --card-shadow:rgba(110,30,46,.18);
+  --font-count:'Playfair Display',serif;
+  --font-since:'Homemade Apple',cursive;
+}
+*{ box-sizing:border-box; }
+html,body{ height:100%; margin:0; }
+body{
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+  gap:22px;
+  min-height:100vh; padding:16px;
+  font-family:'Karla',"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji",sans-serif; color:var(--ink);
+  background:var(--paper);
+  overflow-x:hidden;
+}
+
+/* ---------- "Why I love you" side panels ---------- */
+.love-panel{
+  width:100%; max-width:260px;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:20px;
+  box-shadow:0 16px 34px var(--card-shadow);
+  padding:24px 22px;
+  position:relative;
+  z-index:2;
+  text-align:left;
+  transition:background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.love-panel-title{
+  margin:0 0 14px;
+  font-family:var(--font-count);
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--heading-color);
+  display:flex; align-items:center; gap:9px;
+  line-height:1.25;
+}
+.love-panel-title > svg{ width:1.05em; height:1.05em; flex:0 0 auto; color:var(--rose); }
+
+.envelope-btn{
+  -webkit-appearance:none; appearance:none;
+  margin:0 0 0 auto;
+  width:30px; height:30px;
+  border-radius:50%;
+  border:1px solid var(--card-border);
+  background:rgba(255,255,255,.5);
+  color:var(--rose);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  flex:0 0 auto;
+  padding:0;
+  transition:transform .2s ease, background .2s ease;
+}
+.envelope-btn svg{ width:15px; height:15px; }
+.envelope-btn:hover{ transform:scale(1.1) rotate(-4deg); background:rgba(255,255,255,.85); }
+.envelope-btn:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+
+.love-list{
+  list-style:none; margin:0; padding:0 6px 0 0;
+  display:flex; flex-direction:column; gap:11px;
+  max-height:38vh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:var(--rose) transparent;
+}
+.love-list::-webkit-scrollbar{ width:6px; }
+.love-list::-webkit-scrollbar-track{ background:transparent; }
+.love-list::-webkit-scrollbar-thumb{ background:var(--rose); border-radius:3px; opacity:.6; }
+.love-list li{
+  font-size:.86rem; line-height:1.55; color:var(--ink); opacity:.86;
+  display:flex; gap:9px; align-items:flex-start;
+}
+.love-list li svg{ width:.85em; height:.85em; flex:0 0 auto; margin-top:.32em; color:var(--rose); opacity:.8; }
+
+/* ---------- Love letter "center peek" ---------- */
+.letter-modal{
+  position:fixed; inset:0;
+  z-index:10000;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+  opacity:0; pointer-events:none;
+  transition:opacity .3s ease;
+}
+.letter-modal.show{ opacity:1; pointer-events:auto; }
+.letter-backdrop{
+  position:absolute; inset:0;
+  background:rgba(20,10,15,.5);
+  backdrop-filter:blur(3px);
+}
+.letter-peek{
+  position:relative;
+  width:100%; max-width:480px;
+  max-height:82vh;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:20px;
+  box-shadow:0 30px 70px rgba(0,0,0,.35);
+  padding:38px 32px 30px;
+  display:flex; flex-direction:column;
+  transform:scale(.92) translateY(10px);
+  transition:transform .3s cubic-bezier(.22,1.2,.36,1);
+}
+.letter-modal.show .letter-peek{ transform:scale(1) translateY(0); }
+.letter-close{
+  -webkit-appearance:none; appearance:none;
+  position:absolute; top:14px; right:14px;
+  width:30px; height:30px; border-radius:50%;
+  border:0; background:rgba(0,0,0,.07);
+  color:var(--ink); font-size:1.3rem; line-height:1;
+  cursor:pointer;
+}
+.letter-close:hover{ background:rgba(0,0,0,.13); }
+.letter-close:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+.letter-title{
+  font-family:var(--font-since);
+  font-size:1.6rem;
+  font-weight:400;
+  color:var(--heading-color);
+  margin:0 0 16px;
+  padding-right:28px;
+}
+.letter-body{
+  overflow-y:auto;
+  font-family:'Karla',"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji",sans-serif;
+  font-size:.95rem; line-height:1.8; color:var(--ink);
+  padding-right:10px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--rose) transparent;
+}
+.letter-body::-webkit-scrollbar{ width:6px; }
+.letter-body::-webkit-scrollbar-track{ background:transparent; }
+.letter-body::-webkit-scrollbar-thumb{ background:var(--rose); border-radius:3px; opacity:.6; }
+.letter-body p{ margin:0 0 14px; }
+.letter-body p:last-child{ margin-bottom:0; }
+
+/* ---------- Hand-drawn background scene (see js/scenery.js) ---------- */
+#bgScenery{
+  position:fixed; inset:0;
+  width:100%; height:100%;
+  z-index:0;
+  display:block;
+}
+
+/* ---------- Huggable/throwable scene objects (see js/interactive-objects.js) ----------
+   Sits ABOVE the card and the love panels (their z-index is 3 and 2) so a
+   dragged/thrown object is always visible on top of them, never hidden
+   behind. pointer-events stays "none" so this transparent canvas never
+   blocks clicking anything beneath it — interactive-objects.js listens
+   on `window` instead, which still sees every pointer event regardless. */
+#fgInteractive{
+  position:fixed; inset:0;
+  width:100%; height:100%;
+  z-index:12;
+  pointer-events:none;
+  display:block;
+}
+
+.card{
+  width:100%; max-width:380px;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:22px;
+  box-shadow:0 18px 40px var(--card-shadow);
+  padding:32px 28px 26px;
+  text-align:center;
+  position:relative;
+  z-index:3; /* above .love-panel (z-index:2) so the draggable heart never tucks behind a letter panel */
+  transition:border-color .8s ease, box-shadow .8s ease;
+}
+
+/* ---------- Heart stage: wings + heart + effects ---------- */
+.heart-stage{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:70px;
+}
+
+/* draggable group: wings + heart move together, then glide back */
+.heart-drag{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:5;
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  will-change:transform;
+  transition:transform 1.8s cubic-bezier(.22,1.05,.32,1);
+}
+.heart-drag.dragging{
+  cursor:grabbing;
+  transition:none;
+}
+
+.wing-wrap{
+  display:inline-block;
+  width:56px; height:56px;
+  flex:0 0 auto;
+  pointer-events:none;
+}
+.wing-left{ margin-right:-16px; }
+.wing-right{ margin-left:-16px; transform:scaleX(-1); }
+
+.wing{
+  width:100%; height:100%; display:block;
+  transform-origin:88% 90%;
+  animation:flutter 1.9s infinite;
+  filter:drop-shadow(0 4px 8px rgba(189,146,87,.35));
+}
+
+.f1{ fill:url(#featherGold); opacity:.95; }
+.f2{ fill:url(#featherRose); opacity:.85; }
+.f3{ fill:url(#featherGold); opacity:.72; }
+.f4{ fill:url(#featherRose); opacity:.55; }
+.f5{ fill:var(--blush); opacity:.9; }
+
+/* asymmetric wingbeat: quick powerful downstroke, slow gliding recovery */
+@keyframes flutter{
+  0%{ transform:rotate(-6deg) translateY(0); animation-timing-function:cubic-bezier(.6,.02,.85,.25); }
+  30%{ transform:rotate(24deg) translateY(2px); animation-timing-function:cubic-bezier(.3,.6,.4,1); }
+  44%{ transform:rotate(16deg) translateY(1px); animation-timing-function:cubic-bezier(.4,0,.6,1); }
+  100%{ transform:rotate(-6deg) translateY(0); }
+}
+/* the outer feather lags slightly behind the beat, like a flexing wingtip */
+.feather.f1{
+  transform-box:fill-box;
+  transform-origin:75% 75%;
+  animation:featherLag 1.9s ease-in-out infinite;
+  animation-delay:.07s;
+}
+@keyframes featherLag{
+  0%{ transform:rotate(0deg); }
+  34%{ transform:rotate(10deg); }
+  48%{ transform:rotate(4deg); }
+  100%{ transform:rotate(0deg); }
+}
+
+/* faster, wider flap while being dragged or gliding home */
+.heart-drag.dragging .wing{
+  animation-name:flutterFast;
+  animation-duration:.34s;
+}
+.heart-drag.returning .wing{
+  animation-name:flutterFast;
+  animation-duration:.46s;
+}
+@keyframes flutterFast{
+  0%{ transform:rotate(-10deg); animation-timing-function:cubic-bezier(.6,0,.85,.2); }
+  35%{ transform:rotate(30deg); animation-timing-function:cubic-bezier(.3,.6,.4,1); }
+  100%{ transform:rotate(-10deg); }
+}
+
+.heart-btn{
+  -webkit-appearance:none; appearance:none;
+  background:none; border:0; padding:10px; margin:0;
+  font:inherit; cursor:inherit;
+  position:relative; z-index:2;
+  display:inline-flex; align-items:center; justify-content:center;
+  line-height:1;
+}
+.heart-btn:focus-visible{
+  outline:2px solid var(--gold); outline-offset:4px; border-radius:50%;
+}
+
+/* ---------- Heart glyph: gradient-filled SVG with a periodic shine ---------- */
+.heart-shine-wrap{
+  position:relative;
+  display:inline-block;
+  width:32px; height:29px;
+}
+.heart-glyph{
+  width:100%; height:100%; display:block;
+  filter:drop-shadow(0 4px 8px rgba(110,30,46,.38));
+  animation:pulse 1.8s ease-in-out infinite;
+  transform-origin:50% 62%;
+}
+@keyframes pulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.18); } }
+
+.heart-glyph.pop{ animation:heartPop .4s ease; }
+@keyframes heartPop{
+  0%{ transform:scale(1); }
+  35%{ transform:scale(1.4); }
+  100%{ transform:scale(1); }
+}
+
+.heart-shine-wrap::after{
+  content:'';
+  position:absolute; inset:0;
+  clip-path:path('M16 28 C16 28 1 18.5 1 9.5 C1 4 5 1 9.5 1 C12.7 1 15 3 16 5.5 C17 3 19.3 1 22.5 1 C27 1 31 4 31 9.5 C31 18.5 16 28 16 28 Z');
+  background:linear-gradient(115deg, transparent 32%, rgba(255,255,255,.9) 48%, rgba(255,255,255,.2) 54%, transparent 66%);
+  background-size:240% 240%;
+  background-position:-130% -130%;
+  opacity:0;
+  animation:heartShine 6.5s ease-in-out infinite;
+  pointer-events:none;
+  mix-blend-mode:screen;
+}
+@keyframes heartShine{
+  0%, 55%{ background-position:-130% -130%; opacity:0; }
+  60%{ opacity:.95; }
+  74%{ background-position:130% 130%; opacity:0; }
+  100%{ background-position:130% 130%; opacity:0; }
+}
+
+/* small twinkles that pop up near the heart from time to time */
+.sparkle{
+  position:absolute;
+  color:var(--gold);
+  pointer-events:none;
+  transform:translate(-50%,-50%) scale(0);
+  animation:sparklePop .9s ease forwards;
+  filter:drop-shadow(0 0 4px rgba(189,146,87,.7));
+  z-index:6;
+}
+@keyframes sparklePop{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(0) rotate(0deg); }
+  35%{ opacity:1; transform:translate(-50%,-50%) scale(1.15) rotate(20deg); }
+  70%{ opacity:1; transform:translate(-50%,-50%) scale(.9) rotate(35deg); }
+  100%{ opacity:0; transform:translate(-50%,-50%) scale(.4) rotate(50deg); }
+}
+
+/* ---------- Drag tail: little sparks trailing behind the heart ---------- */
+.drag-trail{
+  position:fixed;
+  pointer-events:none;
+  z-index:4;
+  opacity:.85;
+  transform:translate(-50%,-50%) scale(1);
+  animation:trailFade .55s ease-out forwards;
+  filter:drop-shadow(0 0 4px rgba(194,98,111,.4));
+}
+@keyframes trailFade{
+  0%{ opacity:.85; transform:translate(-50%,-50%) scale(1); }
+  100%{ opacity:0; transform:translate(calc(-50% + var(--driftX,0px)), calc(-50% + var(--driftY,0px))) scale(.25); }
+}
+
+/* ---------- Click anywhere: heart-shaped impact + small hearts flying out ---------- */
+.float-heart-layer{
+  position:fixed; inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:99999; /* always above everything, including an open love letter */
+}
+
+.impact-flash{
+  position:absolute;
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.3);
+  animation:impactFlash .42s ease-out forwards;
+}
+@keyframes impactFlash{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(.2); }
+  25%{ opacity:1; transform:translate(-50%,-50%) scale(1.15); }
+  100%{ opacity:0; transform:translate(-50%,-50%) scale(1.5); }
+}
+
+.impact-ring{
+  position:absolute;
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.3) rotate(var(--rot,0deg));
+  animation:impactRing .8s cubic-bezier(.15,.7,.3,1) forwards;
+}
+.impact-ring path{
+  fill:none;
+  stroke:var(--wine);
+  stroke-width:3;
+  stroke-linejoin:round;
+}
+@keyframes impactRing{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(.3) rotate(var(--rot,0deg)); }
+  12%{ opacity:.95; }
+  100%{ opacity:0; transform:translate(-50%,-50%) scale(2.3) rotate(var(--rot,0deg)); }
+}
+
+.impact-fracture{
+  position:absolute;
+  pointer-events:none;
+  opacity:0;
+}
+.impact-fracture path{
+  fill:none;
+  stroke:var(--crater);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-dasharray:60;
+  stroke-dashoffset:60;
+}
+.impact-fracture.show{ animation:crackFadeInOut .65s ease forwards; }
+.impact-fracture.show path{ animation:crackDraw .3s ease forwards; }
+@keyframes crackDraw{ to{ stroke-dashoffset:0; } }
+@keyframes crackFadeInOut{
+  0%{ opacity:0; }
+  16%{ opacity:1; }
+  72%{ opacity:1; }
+  100%{ opacity:0; }
+}
+
+.impact-debris{
+  position:absolute;
+  pointer-events:none;
+  opacity:0;
+  will-change:transform,opacity;
+  animation-name:debrisFly;
+  animation-timing-function:cubic-bezier(.15,.6,.3,1);
+  animation-fill-mode:forwards;
+}
+@keyframes debrisFly{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(.4) rotate(0deg); }
+  10%{ opacity:1; transform:translate(-50%,-50%) scale(1) rotate(var(--rot0,0deg)); }
+  70%{
+    opacity:1;
+    transform:translate(calc(-50% + var(--endX,0px)), calc(-50% + var(--endY,0px))) scale(.85) rotate(var(--rot1,120deg));
+  }
+  100%{
+    opacity:0;
+    transform:translate(calc(-50% + var(--endX,0px)), calc(-50% + var(--endY2,40px))) scale(.6) rotate(var(--rot2,200deg));
+  }
+}
+
+.float-heart{
+  position:absolute;
+  opacity:0;
+  will-change:transform,opacity;
+  animation-name:floatDrift;
+  animation-timing-function:cubic-bezier(.22,.7,.35,1);
+  animation-fill-mode:forwards;
+}
+@keyframes floatDrift{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(.35) rotate(0deg); }
+  12%{ opacity:1; transform:translate(-50%,-50%) scale(1) rotate(var(--rot0,0deg)); }
+  55%{
+    transform:translate(calc(-50% + var(--midX,0px)), calc(-50% + var(--midY,0px))) scale(1.05) rotate(var(--rot1,15deg));
+  }
+  100%{
+    opacity:0;
+    transform:translate(calc(-50% + var(--endX,0px)), calc(-50% + var(--endY,0px))) scale(.75) rotate(var(--rot2,0deg));
+  }
+}
+
+/* ---------- Special-day dress-up ---------- */
+.occasion-banner{
+  display:none;
+  align-items:center; justify-content:center; gap:7px;
+  margin:0 0 6px;
+  font-size:.85rem; font-weight:600; letter-spacing:.02em;
+  color:var(--heading-color);
+  animation:bannerPop .6s ease;
+}
+.occasion-banner.show{ display:inline-flex; }
+.occasion-banner .banner-icon{
+  display:inline-flex; width:1em; height:1em;
+  color:var(--heading-color);
+}
+@keyframes bannerPop{
+  0%{ opacity:0; transform:translateY(-6px) scale(.9); }
+  60%{ opacity:1; transform:translateY(1px) scale(1.03); }
+  100%{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+.ambient-particle{
+  position:fixed;
+  top:-40px;
+  pointer-events:none;
+  z-index:9998;
+  opacity:0;
+  animation-name:ambientFall;
+  animation-timing-function:linear;
+  animation-fill-mode:forwards;
+  will-change:transform,opacity;
+}
+@keyframes ambientFall{
+  0%{ opacity:0; transform:translate(0,0) rotate(0deg); }
+  8%{ opacity:.9; }
+  90%{ opacity:.85; }
+  100%{ opacity:0; transform:translate(var(--driftX,40px), 108vh) rotate(var(--spin,180deg)); }
+}
+
+/* ---------- Preview toggle: top-right, revealed on hover/focus ---------- */
+.scene-toggle{
+  position:fixed;
+  top:14px; right:14px;
+  z-index:20;
+}
+.scene-toggle-handle{
+  -webkit-appearance:none; appearance:none;
+  width:34px; height:34px;
+  border-radius:50%;
+  background:rgba(255,255,255,.4);
+  border:1px solid rgba(255,255,255,.55);
+  backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--heading-color);
+  cursor:pointer;
+  opacity:.32;
+  padding:0;
+  transition:opacity .25s ease, transform .4s ease;
+}
+.scene-toggle-handle svg{ width:15px; height:15px; }
+.scene-toggle:hover .scene-toggle-handle,
+.scene-toggle:focus-within .scene-toggle-handle{
+  opacity:1;
+  transform:rotate(90deg);
+}
+.scene-toggle-handle:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+
+.scene-panel{
+  position:absolute; top:42px; right:0;
+  min-width:196px;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:14px;
+  box-shadow:0 16px 34px rgba(0,0,0,.2);
+  padding:8px;
+  display:flex; flex-direction:column; gap:2px;
+  opacity:0; pointer-events:none;
+  transform:translateY(-6px);
+  transition:opacity .2s ease, transform .2s ease;
+}
+.scene-toggle:hover .scene-panel,
+.scene-toggle:focus-within .scene-panel{
+  opacity:1; pointer-events:auto; transform:translateY(0);
+}
+.scene-panel button{
+  all:unset;
+  box-sizing:border-box;
+  cursor:pointer;
+  font-family:'Karla',sans-serif; font-size:.78rem;
+  color:var(--ink);
+  padding:7px 10px;
+  border-radius:8px;
+}
+.scene-panel button:hover,
+.scene-panel button:focus-visible{ background:rgba(0,0,0,.06); }
+.scene-panel button.active{ background:var(--rose); color:#fff; }
+
+@media (prefers-reduced-motion:reduce){
+  .heart-glyph, .heart-glyph.pop{ animation:none; }
+  .wing, .heart-drag.dragging .wing, .heart-drag.returning .wing, .feather.f1{ animation:none; }
+  .heart-drag, .heart-drag.dragging, .heart-drag.returning{ transition:none; }
+  .heart-shine-wrap::after, .sparkle{ animation:none; opacity:0; }
+  .float-heart, .drag-trail, .ambient-particle{ animation:none; opacity:0; }
+  .impact-flash, .impact-ring, .impact-fracture.show, .impact-fracture.show path, .impact-debris{ animation:none; opacity:0; }
+  .occasion-banner{ animation:none; }
+}
+
+/* ---------- Rest of the card ---------- */
+.eyebrow{
+  margin:10px 0 2px; text-transform:uppercase; letter-spacing:.16em;
+  font-size:.68rem; color:var(--heading-color); opacity:.7;
+}
+.count{
+  font-family:var(--font-count);
+  font-weight:900;
+  font-size:clamp(2.6rem, 14vw, 4rem);
+  color:var(--heading-color); line-height:1; margin:6px 0 2px;
+}
+.label{
+  font-size:.92rem; letter-spacing:.04em; color:var(--ink); opacity:.75; margin-bottom:14px;
+}
+.divider{ width:60px; height:1px; margin:0 auto 14px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+.breakdown{ font-size:.9rem; color:var(--ink); opacity:.85; margin:0 0 4px; }
+.since{ font-family:var(--font-since); color:var(--heading-color); font-size:1.15rem; margin:10px 0 0; }
+
+/* ---------- Special-day color + font themes ---------- */
+body[data-occasion="valentine"]{
+  --wine:#7A1030; --rose:#E23F63; --gold:#D98A9A; --blush:#FBDCE3; --paper:#FFF3F5;
+  --crater:#8f3346;
+  --card-bg:rgba(255,243,245,.93); --card-border:rgba(217,138,154,.45); --card-shadow:rgba(122,16,48,.2);
+  --font-since:'Parisienne',cursive;
+}
+body[data-occasion="halfAnniversary"]{
+  --gold:#CFA15E; --rose:#D98C97; --crater:#a3703f;
+}
+body[data-occasion="anniversary"]{
+  --wine:#6E1E2E; --gold:#D4AF6A; --rose:#CE7784; --crater:#a3703f;
+}
+body[data-occasion="tessaBirthday"]{
+  --wine:#5B2A7A; --rose:#A855C4; --gold:#E8B84B; --blush:#F0E3FA; --paper:#FBF6FF;
+  --crater:#7B4FA0;
+  --card-bg:rgba(251,246,255,.93); --card-border:rgba(168,85,196,.4); --card-shadow:rgba(91,42,122,.2);
+  --font-count:'Baloo 2',sans-serif;
+}
+body[data-occasion="uncertaintyBirthday"]{
+  --wine:#3B2166; --rose:#7C5CBF; --gold:#C9A9E8; --blush:#E8E1F7; --paper:#F6F3FC; --ink:#241A3D;
+  --crater:#5B3E96;
+  --card-bg:rgba(246,243,252,.93); --card-border:rgba(124,92,191,.4); --card-shadow:rgba(59,33,102,.2);
+  --font-count:'Baloo 2',sans-serif;
+}
+body[data-occasion="halloween"]{
+  --wine:#2A1633; --rose:#FF7A29; --gold:#FFB74D; --blush:#3a2444; --paper:#1B1023; --ink:#F1E6F7;
+  --crater:#8a5fc9; --heading-color:#F5D9FF;
+  --card-bg:rgba(27,16,35,.92); --card-border:rgba(255,183,77,.35); --card-shadow:rgba(0,0,0,.5);
+  --font-since:'UnifrakturCook',cursive;
+}
+body[data-occasion="newYear"]{
+  --wine:#12213E; --rose:#D4AF37; --gold:#F5D67A; --blush:#1c2c4d; --paper:#0d1730; --ink:#F3EFE0;
+  --crater:#c9a227; --heading-color:#F5D67A;
+  --card-bg:rgba(13,23,48,.92); --card-border:rgba(245,214,122,.4); --card-shadow:rgba(0,0,0,.55);
+  --font-count:'Cinzel',serif;
+}
